@@ -1,78 +1,108 @@
-# Texas-Medicaid-CHIP-Enrollment-Trends-2014-2025-
+# Texas Medicaid & CHIP Enrollment Trends (2014–2025)
+
 Public coverage dynamics to support HHSC program monitoring and policy analysis
-📌 Project Overview
 
-This project analyzes Texas Medicaid and CHIP enrollment trends (2014–2025) using publicly available HHSC data. The goal is to demonstrate how healthcare program enrollment evolves over time, identify key drivers of change, and present actionable insights through an interactive Power BI dashboard.
+## 📌 Project Overview
 
-The project covers:
+This project analyzes **Texas Medicaid and CHIP child enrollment trends (Sep 2014 – Nov 2025)** using publicly available **HHSC** data. The goal is to demonstrate how enrollment evolves over time, identify key drivers of change, and communicate actionable insights through an **interactive Power BI dashboard**.
 
-Real-world data cleaning and preparation in SQL (MySQL)
+**What this project demonstrates**
 
-Time-series analysis (MoM, YoY, rolling trends, volatility)
+* Real-world data cleaning & preparation in **SQL (MySQL)**
+* Time-series analysis: **MoM, YoY, rolling trends, volatility**
+* Program-level dynamics: **Medicaid vs CHIP**
+* End-to-end BI workflow: **MySQL → Power BI (ODBC)**
+* Executive-style dashboard design: **KPIs + annotated insights**
 
-Program-level contribution analysis (Medicaid vs CHIP)
+---
 
-End-to-end BI workflow by connecting MySQL to Power BI via ODBC
+## 🗂 Data Source
 
-Executive-style dashboard design with KPIs and insight annotations
+**Source:** Texas Health and Human Services Commission (HHSC) public enrollment data
+**Period:** September 2014 – November 2025
+**Programs:**
 
-🗂 Data Source
+* **Medicaid (children under 21)**
+* **CHIP (Children’s Health Insurance Program)**
 
-Source: Texas Health and Human Services Commission (HHSC) public enrollment data
-Period Covered: September 2014 – November 2025
-Programs:
+> Note: This is a portfolio project using public data. It is not an official HHSC product.
 
-Medicaid (children under 21)
+---
 
-CHIP (Children’s Health Insurance Program)
+## 🛠 Tech Stack
 
-🛠 Tech Stack
+* **SQL (MySQL):** cleaning, transformations, analytical queries/views
+* **Power BI:** dashboard design and visualization
+* **ODBC:** connection between MySQL and Power BI
+* **Excel:** initial inspection of raw files
 
-SQL (MySQL) – data cleaning, transformations, analytical queries
+---
 
-Power BI – dashboard design and visualization
+## 📂 Repository Structure (suggested)
 
-ODBC – connection between MySQL and Power BI
+```
+Texas-Medicaid-CHIP-Enrollment-Trends-2014-2025/
+├─ data/
+│  ├─ raw/                 # original downloaded HHSC files (optional)
+│  └─ processed/           # cleaned exports (optional)
+├─ sql/
+│  ├─ 01_schema.sql
+│  ├─ 02_cleaning.sql
+│  ├─ 03_views.sql
+│  └─ 04_analysis_queries.sql
+├─ powerbi/
+│  └─ texas_medicaid_chip_enrollment.pbix
+├─ assets/
+│  └─ images/
+│     ├─ dashboard_overview.png
+│     ├─ kpis.png
+│     └─ mom_yoy.png
+└─ README.md
+```
 
-Excel – initial raw file inspection
+---
 
-🔄 Data Cleaning & Preparation (SQL)
+## 🔄 Data Cleaning & Preparation (SQL)
 
-Key cleaning steps performed in MySQL:
+Key cleaning steps performed in **MySQL**:
 
-Removed duplicate header rows accidentally imported as data
+* Removed duplicate header rows accidentally imported as data
+* Converted month text (e.g., `Nov-25`) into proper **DATE** format (`month_date`)
+* Cleaned numeric fields (removed commas, handled empty strings)
+* Casted columns to appropriate numeric types (e.g., **BIGINT**)
+* Created analytical SQL views for Power BI consumption
 
-Converted month text (e.g., Nov-25) into proper DATE format (month_date)
+### Example cleaning logic
 
-Cleaned numeric fields (removed commas, handled empty strings)
-
-Casted columns to appropriate numeric types (BIGINT)
-
-Created analytical SQL views for Power BI consumption
-
-Example cleaning logic:
-
+```sql
 UPDATE tx_enrollment_clean
 SET total = NULLIF(REPLACE(TRIM(total), ',', ''), '');
+```
 
-Converted month strings to date:
+### Convert month strings to date
 
+```sql
 UPDATE tx_enrollment_clean
 SET month_date = STR_TO_DATE(month, '%b-%y');
-📐 Analytical SQL View (Used in Power BI)
+```
 
-A prepared SQL view was created to compute Month-over-Month (MoM) changes and program-level contributions:
+---
 
+## 📐 Analytical SQL View (used in Power BI)
+
+A prepared SQL view computes **Month-over-Month (MoM)** changes and program-level contributions:
+
+```sql
 CREATE VIEW vw_mom_contribution AS
 WITH t AS (
-  SELECT 
+  SELECT
     month_date,
     medicaid_caseload - LAG(medicaid_caseload) OVER (ORDER BY month_date) AS medicaid_mom,
     regular_chip - LAG(regular_chip) OVER (ORDER BY month_date) AS chip_mom,
     total - LAG(total) OVER (ORDER BY month_date) AS total_mom
   FROM tx_enrollment_clean
 )
-SELECT 
+SELECT
   month_date,
   medicaid_mom,
   chip_mom,
@@ -80,123 +110,111 @@ SELECT
   ROUND(medicaid_mom * 100.0 / NULLIF(total_mom, 0), 2) AS medicaid_contrib_pct,
   ROUND(chip_mom * 100.0 / NULLIF(total_mom, 0), 2) AS chip_contrib_pct
 FROM t;
+```
 
-This allowed Power BI to directly consume pre-aggregated metrics.
+---
 
-🔎 Key Analytical Questions (15 SQL Analyses)
+## 🔎 Key Analytical Questions (15 SQL Analyses)
 
-What is the total enrollment trend over time (2014–2025)?
+* What is the total enrollment trend over time (2014–2025)?
+* When did total enrollment peak?
 
-When did total enrollment peak?
+  * Peak enrollment **≈ 4.4M in 2022**
+* What is the latest total enrollment?
 
-Peak enrollment ≈ 4.4M in 2022
+  * **~3.1M as of Nov 2025**
+* What is the latest Month-over-Month (MoM) change?
 
-What is the latest total enrollment?
+  * Latest MoM: **–17K (Nov 2025)**
+* What is the latest Year-over-Year (YoY) change?
 
-~3.1M as of Nov 2025
+  * Latest YoY: **–74K**
+* Which months experienced the largest MoM increase?
 
-What is the Month-over-Month (MoM) change for total enrollment?
+  * Largest spike during **2020 pandemic expansion (~+82K)**
+* Which months saw the largest MoM decline?
 
-Latest MoM: –17K (Nov 2025)
+  * Sharp declines during **2023 redetermination period (~–78K)**
+* Rolling 12-month average and volatility (CV)
+* Medicaid trend vs CHIP trend
+* Program share of child enrollment
 
-What is the Year-over-Year (YoY) change?
+  * **Medicaid share ≈ 94.26%**
+  * **CHIP share ≈ 5.74% (Nov 2025)**
+* Medicaid vs CHIP contribution to monthly change
+* Periods with highest volatility
 
-Latest YoY: –74K
+  * **2020–2023** showed elevated volatility
 
-Which months experienced the largest MoM increase?
+---
 
-Largest spike during 2020 pandemic expansion (~+82K)
+## 📊 Power BI Dashboard
 
-Which months saw the largest MoM decline?
+### KPIs
 
-Sharp declines during 2023 redetermination period (~–78K)
+* Total Enrollment (Latest)
+* MoM Change (Latest)
+* YoY Change (Latest)
+* Medicaid Share of Child Coverage
+* CHIP Share of Child Coverage
 
-What is the rolling 12-month average of total enrollment?
+### Visuals
 
-What is the rolling 12-month volatility (CV)?
+* Medicaid vs CHIP Enrollment Over Time (split view)
+* Total Enrollment Over Time
+* Month-over-Month Change in Total Enrollment (max/min labeling)
+* Medicaid vs CHIP Contribution to Monthly Change
+* Interactive slicers (Year range and Month range)
 
-How does Medicaid enrollment trend over time?
+### Key insights highlighted
 
-How does CHIP enrollment trend over time?
+* Enrollment peaked in **2022 (~4.4M)** during continuous coverage policies
+* Significant decline observed post-**2023** due to eligibility redetermination
+* Medicaid drives most short-term volatility; CHIP remains relatively stable (~6%)
+* Volatility was highest during **2020–2023**
 
-What share of child enrollment is Medicaid vs CHIP?
+---
 
-Medicaid share ≈ 94.26%
+## 🎯 Key Findings
 
-CHIP share ≈ 5.74% (Nov 2025)
+* **Pandemic-era expansion:** Enrollment increased steadily and peaked in 2022
+* **Post-pandemic normalization:** Sharp declines occurred during 2023–2024 as redetermination resumed
+* **Program dynamics:** Medicaid accounts for most child coverage and nearly all MoM volatility
+* **CHIP stability:** CHIP remains comparatively stable and a small share of total child coverage
 
-How much does Medicaid contribute to MoM changes?
+---
 
-How much does CHIP contribute to MoM changes?
-
-During which periods was volatility highest?
-
-2020–2023 showed elevated volatility
-
-📊 Power BI Dashboard
-
-The Power BI dashboard includes:
-
-KPIs
-
-Total Enrollment (Latest)
-
-MoM Change (Latest)
-
-YoY Change (Latest)
-
-Medicaid Share of Child Coverage
-
-CHIP Share of Child Coverage
-
-Visuals
-
-Medicaid vs CHIP Enrollment Over Time (split view)
-
-Total Enrollment Over Time
-
-Month-over-Month Change in Total Enrollment (with max/min labeling)
-
-Medicaid vs CHIP Contribution to Monthly Change
-
-Interactive slicers (Year range and Month range)
-
-Key Insights Highlighted
-
-Enrollment peaked in 2022 (~4.4M) during continuous coverage policies
-
-Significant decline observed post-2023 due to eligibility redetermination
-
-Medicaid drives most short-term volatility; CHIP remains relatively stable (~6%)
-
-Volatility was highest during 2020–2023
-
-🎯 Key Findings
-
-Pandemic-era expansion: Enrollment steadily increased and peaked in 2022.
-
-Post-pandemic normalization: Sharp declines occurred during 2023–2024 as eligibility redetermination resumed.
-
-Program dynamics: Medicaid accounts for the majority of child coverage and nearly all month-to-month volatility.
-
-CHIP stability: CHIP enrollment remains comparatively stable and represents a small share of total child coverage.
-
-🚀 Why This Project Matters
+## 🚀 Why This Project Matters
 
 This project mirrors real-world work performed by healthcare and public sector analysts:
 
-Working with messy government data
+* Working with messy government data
+* Creating reproducible SQL pipelines
+* Translating enrollment data into executive-ready insights
+* Supporting policy monitoring and program evaluation
 
-Creating reproducible SQL pipelines
+---
 
-Translating raw enrollment data into executive-ready insights
+## 📸 Dashboard Preview
 
-Supporting policy monitoring and program evaluation
+Add screenshots here:
 
-📸 Dashboard Preview
+* `assets/images/dashboard_overview.png`
+* `assets/images/kpis.png`
+* `assets/images/mom_yoy.png`
 
-(Add screenshots of your Power BI dashboard here)
+Example:
 
-📬 Contact
+```md
+![Dashboard Overview](assets/images/dashboard_overview.png)
+```
 
-If you have feedback or would like to discuss healthcare analytics or public policy data, feel free to connect!
+---
+
+## 📬 Contact
+
+If you have feedback or would like to discuss healthcare analytics or public policy data, feel free to connect:
+
+* **LinkedIn:** https://www.linkedin.com/in/munawer-jabeen-900811380/
+* **GitHub:** https://github.com/Mjabeen164
+* **Email:** [munawerjabeen703@gmail.com](mailto:munawerjabeen703@gmail.com)
