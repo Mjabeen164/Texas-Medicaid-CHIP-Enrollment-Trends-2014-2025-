@@ -122,41 +122,34 @@ FROM t;
 
 ## 🔎 Key Analytical Questions (15 SQL Analyses)
 
-This project includes a curated set of analytical queries used to explore enrollment trends, volatility, seasonality, and program contributions.
+This project includes a curated set of analytical queries used to examine enrollment trends, volatility, seasonality, and program-level dynamics.
 
-- SQL file: [`sql/02_analytical_queries.sql`](sql/02_analytical_queries.sql)
-- These queries feed exploratory analysis and inform Power BI dashboard design.
+- SQL file: [`sql/02_analytical_queries.sql`](sql/02_analytical_queries.sql)  
+- These queries support exploratory analysis and inform Power BI dashboard design.
+
+**Selected questions and findings:**
 
 * What is the total enrollment trend over time (2014–2025)?
-* When did total enrollment peak?
-
+* When did total enrollment peak?  
   * Peak enrollment **≈ 4.4M in 2022**
-* What is the latest total enrollment?
-
+* What is the latest total enrollment?  
   * **~3.1M as of Nov 2025**
-* What is the latest Month-over-Month (MoM) change?
-
+* What is the latest Month-over-Month (MoM) change?  
   * Latest MoM: **–17K (Nov 2025)**
-* What is the latest Year-over-Year (YoY) change?
-
+* What is the latest Year-over-Year (YoY) change?  
   * Latest YoY: **–74K**
-* Which months experienced the largest MoM increase?
-
+* Which months experienced the largest MoM increase?  
   * Largest spike during **2020 pandemic expansion (~+82K)**
-* Which months saw the largest MoM decline?
-
+* Which months saw the largest MoM decline?  
   * Sharp declines during **2023 redetermination period (~–78K)**
-* Rolling 12-month average and volatility (CV)
-* Medicaid trend vs CHIP trend
-* Program share of child enrollment
-
-  * **Medicaid share ≈ 94.26%**
+* How do rolling 12-month averages and volatility behave over time?
+* How do Medicaid and CHIP enrollment trends differ?
+* What share of child enrollment is Medicaid vs CHIP?  
+  * **Medicaid share ≈ 94.26%**  
   * **CHIP share ≈ 5.74% (Nov 2025)**
-* Medicaid vs CHIP contribution to monthly change
-* Periods with highest volatility
-
+* How do Medicaid and CHIP contribute to monthly changes?
+* During which periods was enrollment volatility highest?  
   * **2020–2023** showed elevated volatility
-
 ---
 
 ## 📊 Power BI Dashboard
