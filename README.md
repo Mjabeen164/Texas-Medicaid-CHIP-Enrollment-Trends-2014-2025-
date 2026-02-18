@@ -198,7 +198,7 @@ This project mirrors real-world work performed by healthcare and public sector a
 ---
 
 ## 📸 Dashboard Preview
-![Dashboard Overview](dashboard.png)
+![Dashboard Overview](assets/dashboard.png)
 
 
 ---
