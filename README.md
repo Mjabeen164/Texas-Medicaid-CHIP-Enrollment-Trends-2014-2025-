@@ -1,3 +1,8 @@
+<p align="center">
+  <img src="banner.png" alt="Munawer Jabeen | Data Analyst" width="850"/>
+</p>
+
+
 # Texas Medicaid & CHIP Enrollment Trends (2014–2025)
 
 Public coverage dynamics to support HHSC program monitoring and policy analysis
@@ -197,17 +202,9 @@ This project mirrors real-world work performed by healthcare and public sector a
 
 ## 📸 Dashboard Preview
 
-Add screenshots here:
 
-* `assets/images/dashboard_overview.png`
-* `assets/images/kpis.png`
-* `assets/images/mom_yoy.png`
+* `dashboard.png`
 
-Example:
-
-```md
-![Dashboard Overview](assets/images/dashboard_overview.png)
-```
 
 ---
 
