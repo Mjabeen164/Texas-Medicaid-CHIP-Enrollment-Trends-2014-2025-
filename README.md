@@ -60,6 +60,7 @@ Texas-Medicaid-CHIP-Enrollment-Trends-2014-2025/
 ---
 
 ## 🔄 Data Cleaning & Preparation (SQL)
+- Data prep SQL: [`sql/01_data_cleaning_and_views.sql`](sql/01_data_cleaning_and_views.sql)
 
 Key cleaning steps performed in **MySQL**:
 
@@ -115,7 +116,7 @@ FROM t;
 
 This project includes a curated set of analytical queries used to explore enrollment trends, volatility, seasonality, and program contributions.
 
-- SQL file: `sql/02_analytical_queries.sql`
+- SQL file: [`sql/02_analytical_queries.sql`](sql/02_analytical_queries.sql)
 - These queries feed exploratory analysis and inform Power BI dashboard design.
 
 * What is the total enrollment trend over time (2014–2025)?
@@ -188,18 +189,27 @@ This project includes a curated set of analytical queries used to explore enroll
 
 ## 🚀 Why This Project Matters
 
-This project mirrors real-world work performed by healthcare and public sector analysts:
+This project reflects real-world workflows used by healthcare and public sector analytics teams:
 
 * Working with messy government data
 * Creating reproducible SQL pipelines
 * Translating enrollment data into executive-ready insights
 * Supporting policy monitoring and program evaluation
+* This type of monitoring framework supports operational reporting, leadership briefings, and policy impact assessment.
 
 ---
 
 ## 📸 Dashboard Preview
 ![Dashboard Overview](assets/dashboard.png)
 
+
+---
+## ▶️ How to Reproduce This Project
+
+1. Load the HHSC public enrollment data into MySQL.
+2. Run `sql/01_data_cleaning_and_views.sql` to clean and prepare analytical views.
+3. (Optional) Run `sql/02_analytical_queries.sql` for exploratory analysis.
+4. Connect Power BI to MySQL via ODBC and open `powerbi/texas_medicaid_chip_enrollment.pbix`.
 
 ---
 
