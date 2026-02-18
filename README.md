@@ -42,6 +42,14 @@ This project analyzes **Texas Medicaid and CHIP child enrollment trends (Sep 201
 * **Excel:** initial inspection of raw files
 
 ---
+## ▶️ How to Reproduce This Project
+
+1. Load the HHSC public enrollment data into MySQL.
+2. Run `sql/01_data_cleaning_and_views.sql` to clean and prepare analytical views.
+3. (Optional) Run `sql/02_analytical_queries.sql` for exploratory analysis.
+4. Connect Power BI to MySQL via ODBC and open `powerbi/texas_medicaid_chip_enrollment.pbix`.
+
+---   
 
 ## 📂 Repository Structure (suggested)
 
@@ -201,15 +209,6 @@ This project reflects real-world workflows used by healthcare and public sector 
 
 ## 📸 Dashboard Preview
 ![Dashboard Overview](assets/dashboard.png)
-
-
----
-## ▶️ How to Reproduce This Project
-
-1. Load the HHSC public enrollment data into MySQL.
-2. Run `sql/01_data_cleaning_and_views.sql` to clean and prepare analytical views.
-3. (Optional) Run `sql/02_analytical_queries.sql` for exploratory analysis.
-4. Connect Power BI to MySQL via ODBC and open `powerbi/texas_medicaid_chip_enrollment.pbix`.
 
 ---
 
